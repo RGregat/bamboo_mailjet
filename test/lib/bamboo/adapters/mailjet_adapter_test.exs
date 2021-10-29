@@ -213,12 +213,11 @@ defmodule Bamboo.MailjetAdapterTest do
     assert params["Mj-EventPayLoad"] == "customEventPayLoad"
   end
 
-  test "raises if the response is not a success" do
+  test "returns error if the response is not a success" do
     email = new_email(from: "INVALID_EMAIL")
 
-    assert_raise Bamboo.MailjetAdapter.ApiError, fn ->
-      email |> MailjetAdapter.deliver(@config)
-    end
+    {:error, %Bamboo.ApiError{message: message}} = Bamboo.MailjetAdapter.deliver(email, @config)
+    assert message.response =~ "Error!!"
   end
 
   test "deliver/2 omits attachments key if no attachments" do
