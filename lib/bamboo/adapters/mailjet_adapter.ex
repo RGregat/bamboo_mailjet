@@ -192,7 +192,7 @@ defmodule Bamboo.MailjetAdapter do
 
     body
     |> Map.put("attachments", format_attachments(files))
-    |> Map.put("inlined-attachments", format_attachments(inlined))
+    |> Map.put("Inline_attachments", format_attachments(inlined))
   end
 
   defp format_attachments(attachments) do

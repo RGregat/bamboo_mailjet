@@ -240,7 +240,7 @@ defmodule Bamboo.MailjetAdapterTest do
       |> Email.put_header("Reply-To", "reply@foo.com")
       |> Email.put_attachment(%Attachment{
         content_type: "image/png",
-        content_id: "my_image",
+        content_id: "my_image.png",
         filename: "my_image.png",
         data:
           <<137, 80, 78, 71, 13, 10, 26, 10, 0, 0, 0, 13, 73, 72, 68, 82, 0, 0, 0, 1, 0, 0, 0, 1,
@@ -255,11 +255,11 @@ defmodule Bamboo.MailjetAdapterTest do
       :fake_mailjet,
       %{
         params: %{
-          "inlined-attachments" => [
+          "Inline_attachments" => [
             %{
               "filename" => "my_image.png",
               "content-type" => "image/png",
-              "content_id" => "my_image",
+              "content_id" => "my_image.png",
               "content" =>
                 "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg=="
             }
