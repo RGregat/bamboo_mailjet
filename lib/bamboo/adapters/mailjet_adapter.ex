@@ -185,19 +185,41 @@ defmodule Bamboo.MailjetAdapter do
   defp put_attachments(body, %Email{attachments: []}), do: body
 
   defp put_attachments(body, %Email{attachments: attachments}) do
-    transformed =
+    {inlined, files} =
       attachments
       |> Enum.reverse()
-      |> Enum.map(fn attachment ->
-        %{
-          filename: attachment.filename,
-          "content-type": attachment.content_type,
-          content: Base.encode64(attachment.data)
-        }
-      end)
+      |> Enum.split_with(&is_inlined_attachment?/1)
 
-    Map.put(body, :attachments, transformed)
+    body
+    |> Map.put("attachments", format_attachments(files))
+    |> Map.put("inlined-attachments", format_attachments(inlined))
   end
+
+  defp format_attachments(attachments) do
+    Enum.map(attachments, fn attachment ->
+      case is_inlined_attachment?(attachment) do
+        true ->
+          %{
+            filename: attachment.filename,
+            "content-type": attachment.content_type,
+            content: Base.encode64(attachment.data),
+            content_id: attachment.content_id
+          }
+
+        _ ->
+          %{
+            filename: attachment.filename,
+            "content-type": attachment.content_type,
+            content: Base.encode64(attachment.data)
+          }
+      end
+    end)
+  end
+
+  defp is_inlined_attachment?(%_{content_id: cid}) when not is_nil(cid),
+    do: true
+
+  defp is_inlined_attachment?(_), do: false
 
   defp recipients(new_recipients) do
     new_recipients
