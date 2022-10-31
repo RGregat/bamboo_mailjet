@@ -5,7 +5,7 @@ defmodule BambooMailjet.Mixfile do
     [
       app: :bamboo_mailjet,
       version: "0.1.2",
-      elixir: "~> 1.17",
+      elixir: "~> 1.14",
       build_embedded: Mix.env() == :prod,
       start_permanent: Mix.env() == :prod,
       description: "A Mailjet adapter for Bamboo",
